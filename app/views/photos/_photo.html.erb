@@ -25,20 +25,22 @@
   
   <div class="card-body">
     <div class="mb-3 d-flex justify-content-between">
-      <div class="d-flex align-items-baseline">
-        <%= pluralize(photo.likes_count, "like") %>
+      <div id="<%= dom_id(photo) %>_likes">
+        <div class="d-flex align-items-baseline">
+          <%= pluralize(photo.likes_count, "like") %>
 
-        <% like = current_user.likes.find_by(photo: photo) %>
+          <% like = current_user.likes.find_by(photo: photo) %>
 
-        <% if like %>
-          <%= link_to like, class: "btn btn-link", method: :delete do %>
-            <i class="fas fa-heart fa-fw"></i>
+          <% if like %>
+            <%= link_to like, class: "btn btn-link", method: :delete, remote: true do %>
+              <i class="fas fa-heart fa-fw"></i>
 
-            Un-like
+              Un-like
+            <% end %>
+          <% else %>
+            <%= render "likes/form", like: photo.likes.build(fan: current_user) %>
           <% end %>
-        <% else %>
-          <%= render "likes/form", like: photo.likes.build(fan: current_user) %>
-        <% end %>
+        </div>
       </div>
 
       <div>
